@@ -6,14 +6,14 @@
 #    By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/30 20:22:21 by sede-san          #+#    #+#              #
-#    Updated: 2025/07/31 03:16:03 by sede-san         ###   ########.fr        #
+#    Updated: 2025/07/31 05:23:15 by sede-san         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # ******************************* Output files ******************************* #
 
 # Executable file name
-NAME =
+NAME = minishell
 
 # ************************** Compilation variables *************************** #
 
@@ -24,7 +24,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -Wunreachable-code # -Ofast
 
 # Additional headers
-HEADERS = -I $(INCLUDE_PATH) # -I $(GNL_INCLUDE_PATH) -I $(PRINTF_INCLUDE_PATH) -I $(LIBFT_INCLUDE_PATH)
+HEADERS = -I $(INCLUDE_PATH) -I $(GNL_INCLUDE_PATH) -I $(PRINTF_INCLUDE_PATH) -I $(LIBFT_INCLUDE_PATH)
 
 # Debug flags, execute with DEBUG=1 -> make DEBUG=1
 DFLAGS = -g3
@@ -58,7 +58,7 @@ SRC_PATH = src
 
 # Source files
 SRC = \
-
+	$(SRC_PATH)/minishell.c
 
 # Include path
 INCLUDE_PATH = ./include
@@ -118,12 +118,12 @@ re: fclean all
 # Compile libraries
 lib:
 	@$(MAKE) libft
-	@$(MAKE) ft_printf
+#	@$(MAKE) ft_printf
 	@$(MAKE) get_next_line
 .PHONY: lib
 
 # Compile file with libraries
-# LIBS = $(GNL_BIN) $(LIBFT_BIN) $(PRINTF_BIN)
+LIBS = -lreadline $(GNL_BIN) $(LIBFT_BIN) # $(PRINTF_BIN)
 
 # Libraries path
 LIB_PATH = lib
@@ -189,6 +189,7 @@ get_next_line:
 		echo "$(YELLOW)$(EMOJI_WRENCH) Cloning $(GNL)...$(RESET)"; \
 		git clone $(GNL_REPO) $(GNL_PATH); \
 		rm -rf $(GNL_PATH)/.git; \
+		rm -rf $(GNL_PATH)/tests; \
 		echo "$(GREEN)$(EMOJI_CHECK) $(GNL) cloned...$(RESET)"; \
 	fi
 	@if [ ! -f $(GNL_BIN) ]; then \

@@ -1,5 +1,14 @@
+# File
+minishell
+
 # Build path
-build/
+/build
+
+# Libraries path
+/lib
+
+# VSCode
+/.vscode
 
 # Prerequisites
 *.d
