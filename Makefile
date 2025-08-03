@@ -6,7 +6,7 @@
 #    By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/30 20:22:21 by sede-san          #+#    #+#              #
-#    Updated: 2025/07/31 05:23:15 by sede-san         ###   ########.fr        #
+#    Updated: 2025/08/03 23:38:53 by sede-san         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,17 @@ SRC_PATH = src
 
 # Source files
 SRC = \
-	$(SRC_PATH)/minishell.c
+	$(SRC_PATH)/minishell.c			\
+	$(SRC_PATH)/builtins/cd.c		\
+	$(SRC_PATH)/builtins/echo.c		\
+	$(SRC_PATH)/builtins/env.c		\
+	$(SRC_PATH)/builtins/exit.c		\
+	$(SRC_PATH)/builtins/export.c	\
+	$(SRC_PATH)/builtins/pwd.c		\
+	$(SRC_PATH)/builtins/unset.c	\
+	$(SRC_PATH)/commands/exec.c		\
+	$(SRC_PATH)/commands/parse.c	\
+	$(SRC_PATH)/utils/get_hostname.c
 
 # Include path
 INCLUDE_PATH = ./include
@@ -108,6 +118,16 @@ fclean: clean
 	fi
 	@echo "$(GREEN)$(EMOJI_CHECK) Binaries cleaned.$(RESET)"
 .PHONY: fclean
+
+update: fclean
+	@echo "$(RED)$(EMOJI_BROOM) Removing libraries...$(RESET)"
+	@rm -rf $(LIB_PATH)
+	@echo "$(GREEN)$(EMOJI_CHECK) Libraries removed.$(RESET)"
+	@echo "$(YELLOW)$(EMOJI_WRENCH) Fetching updates...$(RESET)"
+	@git pull
+	@echo "$(GREEN)$(EMOJI_CHECK) Updated.$(RESET)"
+	@echo "$(YELLOW)$(EMOJI_WRENCH) Recompiling...$(RESET)"
+	@$(MAKE)
 
 # Recompile
 re: fclean all
