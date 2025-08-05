@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 14:38:18 by sede-san          #+#    #+#             */
-/*   Updated: 2025/08/03 02:11:33 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/08/05 09:39:25 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,20 @@ int	exit_builtin(
 	ft_putendl("exit");
 	if (argc == 1)
 		exit_code = 0;
-	else if (argc > 1)
+	else
 	{
-		if (!ft_isdigit(*argv[1]) || !ft_strisnum(argv[1]))
+		if (!ft_strisnum(argv[1]))
 		{
-			fprintf(stderr, "exit: %s: numeric argument required", argv[1]);
+			fprintf(stderr, "exit: %s: numeric argument required\n", argv[1]);
 			exit_code = 2;
 		}
-		else
+		else if (argc > 2)
 		{
-			fprintf(stderr, "exit: too many arguments");
+			fprintf(stderr, "exit: too many arguments\n");
 			exit_code = -1;
 		}
+		else
+			exit_code = (unsigned int)((unsigned char)(ft_atol(argv[1])));
 	}
-	else
-		exit_code = (unsigned int)((unsigned char)(ft_atol(argv[1])));
 	return (exit_code);
 }
