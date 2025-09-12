@@ -1,36 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   history.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/01 14:15:09 by sede-san          #+#    #+#             */
-/*   Updated: 2025/08/03 02:33:30 by sede-san         ###   ########.fr       */
+/*   Created: 2025/08/20 22:07:04 by sede-san          #+#    #+#             */
+/*   Updated: 2025/08/21 14:43:08 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef HISTORY_H
+# define HISTORY_H
 
-// static void	printenv(char **envp);
 
-int	env_builtin(
-	int argc,
-	char const *argv[])
-{
-	(void)argc;
-	(void)argv;
-	// if (!argv || !*argv)
-		// printenv(envp);
-	return (0);
-}
 
-// static void	printenv(
-// 	char **envp)
-// {
-// 	size_t	i;
+// history.c
 
-// 	i = 0;
-// 	while (envp[i])
-// 		ft_putendl(envp[i++]);
-// }
+#endif

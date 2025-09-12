@@ -6,14 +6,14 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 03:42:25 by sede-san          #+#    #+#             */
-/*   Updated: 2025/08/04 00:29:45 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/08/21 17:31:52 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static t_minishell	init_minishell(char **envp);
-static void	minishell(t_minishell *minishell, char **envp);
+static int	minishell(t_minishell *minishell);
 static void	clear_minishell(t_minishell *minishell);
 
 /**
@@ -36,15 +36,19 @@ int	main(
 	char **envp)
 {
 	t_minishell	shell;
+	int			exit_code;
 
 	(void)argv;
 	errno = 0;
 	if (argc != 1)
 		return (errno = EINVAL, errno);
+	init_signal();
 	shell = init_minishell(envp);
-	minishell(&shell, envp);
+	if (errno)
+		fprintf(stderr, "minishell: %s\n" , strerror(errno));
+	exit_code = minishell(&shell);
 	clear_minishell(&shell);
-	return (EXIT_SUCCESS);
+	return (exit_code);
 }
 
 /**
@@ -61,11 +65,16 @@ static t_minishell	init_minishell(
 	char **envp)
 {
 	t_minishell	minishell;
+	size_t		n_env;
 
 	ft_bzero(&minishell, sizeof(t_minishell));
-	minishell.history_file = ft_strjoin(getenv("HOME"), HISTORY_FILE);
-	// minishell.path = ft_split(getenv("PATH"), ':');
-	minishell.envp = envp;
+	n_env = 0;
+	while (envp[n_env])
+		n_env++;
+	minishell.envp = (char **)malloc(n_env * sizeof(char *));
+	if (!minishell.envp && errno == ENOMEM)
+		return (clear_minishell(&minishell), minishell);
+	minishell.history_file = ft_strjoin(getenv("HOME"), "/"HISTORY_FILE);
 	return (minishell);
 }
 
@@ -95,15 +104,15 @@ static t_minishell	init_minishell(
  *      - Waits for the child process to finish.
  *  - Cleans up allocated memory and clears the history on exit.
  */
-static void	minishell(t_minishell *minishell, char **envp)
+static int	minishell(t_minishell *minishell)
 {
+	int		exit_code;
 	char	*line;
-	char 	*cmd;
-	char 	*args[2];
-	pid_t	pid;
+	t_cmd	cmd;
 
+	exit_code = 0;
 	line = NULL;
-	read_history(minishell->history_file);
+	// read_history(minishell->history_file);
 	while (1)
 	{
 		if (line)
@@ -113,7 +122,7 @@ static void	minishell(t_minishell *minishell, char **envp)
 		if (hostname)
 		{
 			prompt = ft_strjoin_mul(12,
-				BOLD, BLUE_TEXT, getenv("USER"), "@", hostname,
+				BOLD, BLUE_TEXT, getenv("USERNAME"), "@", hostname,
 				RESET, ":",
 				BOLD, GREEN_TEXT, getenv("PWD"),
 				RESET, "> ");
@@ -126,47 +135,39 @@ static void	minishell(t_minishell *minishell, char **envp)
 		}
 		else
 			line = readline("minishell> ");
-		if (!line && exit_builtin(1, NULL))
-			break ;
+		if (!line)
+		{
+			write_history(minishell->history_file);
+			cmd = parse_cmd("exit", minishell);
+			exit_code = exit_builtin(cmd.argc, (const char **)cmd.argv);
+			if (exit_code != -1)
+				break ;
+		}
 		if (*line)
 		{
 			add_history(line);
-			write_history(minishell->history_file);
-
-			t_cmd cmd_parse = parse_cmd(line, minishell);
-			// exec_cmd();
-
-			// builtins
-			if (ft_strncmp("exit\0", line, 5) == 0 && exit_builtin(1, NULL) != -1)
-				break ;
-			else if (ft_strncmp("cd\0", line, 3) == 0)
-				cd_builtin(1, NULL);
-			else if (ft_strncmp("pwd\0", line, 4) == 0)
-				pwd_builtin(1, NULL);
-			else if (ft_strncmp("env\0", line, 4) == 0)
-				env_builtin(1, NULL);
-			else if (ft_strncmp("echo\0", line, 5) == 0)
-				echo_builtin(0, NULL);
-			// not builtins
-			else
+			cmd = parse_cmd(line, minishell);
+			free(line);
+			line = NULL;
+			if (ft_strncmp(cmd.argv[0], "exit\0", 5) == 0)
 			{
-				// if string does not start with "./"
-				cmd = ft_strjoin("/usr/bin/", line);
-				args[0] = line;
-				args[1] = NULL;
-				pid = fork();
-				if (pid == 0)
-				{
-					execve(cmd, args, envp);
-					exit(0);
-				}
-				waitpid(pid, NULL, 0);
-				free(cmd);
+				exit_code = exit_builtin(cmd.argc, (const char **)cmd.argv);
+				write_history(minishell->history_file);
+				if (exit_code != -1)
+					break ;
 			}
+			else if (is_builtin(&cmd))
+				exec_builtin(&cmd, minishell->envp);
+			else
+				exec_cmd(&cmd, minishell->envp);
 		}
 	}
+
+	write_history(minishell->history_file);
 	rl_clear_history();
-	free(line);
+	if (line)
+		free(line);
+	return (exit_code);
 }
 
 /**
@@ -188,6 +189,5 @@ static void	clear_minishell(
 	ft_bzero(minishell->history_file,
 		ft_strlen(minishell->history_file) * sizeof(char));
 	free(minishell->history_file);
-	// ft_free_split(minishell->path);
 	ft_bzero(minishell, sizeof(t_minishell));
 }

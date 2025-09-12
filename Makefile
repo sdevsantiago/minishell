@@ -6,7 +6,7 @@
 #    By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/30 20:22:21 by sede-san          #+#    #+#              #
-#    Updated: 2025/08/03 23:38:53 by sede-san         ###   ########.fr        #
+#    Updated: 2025/08/20 22:40:43 by sede-san         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,17 +58,20 @@ SRC_PATH = src
 
 # Source files
 SRC = \
-	$(SRC_PATH)/minishell.c			\
-	$(SRC_PATH)/builtins/cd.c		\
-	$(SRC_PATH)/builtins/echo.c		\
-	$(SRC_PATH)/builtins/env.c		\
-	$(SRC_PATH)/builtins/exit.c		\
-	$(SRC_PATH)/builtins/export.c	\
-	$(SRC_PATH)/builtins/pwd.c		\
-	$(SRC_PATH)/builtins/unset.c	\
-	$(SRC_PATH)/commands/exec.c		\
-	$(SRC_PATH)/commands/parse.c	\
-	$(SRC_PATH)/utils/get_hostname.c
+	$(SRC_PATH)/minishell.c							\
+	$(SRC_PATH)/commands/command_utils.c			\
+	$(SRC_PATH)/commands/exec.c						\
+	$(SRC_PATH)/commands/parse.c					\
+	$(SRC_PATH)/features/builtins/builtin_utils.c	\
+	$(SRC_PATH)/features/builtins/cd.c				\
+	$(SRC_PATH)/features/builtins/echo.c			\
+	$(SRC_PATH)/features/builtins/exit.c			\
+	$(SRC_PATH)/features/builtins/export.c			\
+	$(SRC_PATH)/features/builtins/printenv.c		\
+	$(SRC_PATH)/features/builtins/pwd.c				\
+	$(SRC_PATH)/features/builtins/unset.c			\
+	$(SRC_PATH)/utils/get_hostname.c				\
+	$(SRC_PATH)/utils/signals.c
 
 # Include path
 INCLUDE_PATH = ./include
@@ -119,6 +122,7 @@ fclean: clean
 	@echo "$(GREEN)$(EMOJI_CHECK) Binaries cleaned.$(RESET)"
 .PHONY: fclean
 
+# Delete libraries, object files and binaries
 update: fclean
 	@echo "$(RED)$(EMOJI_BROOM) Removing libraries...$(RESET)"
 	@rm -rf $(LIB_PATH)
@@ -128,6 +132,7 @@ update: fclean
 	@echo "$(GREEN)$(EMOJI_CHECK) Updated.$(RESET)"
 	@echo "$(YELLOW)$(EMOJI_WRENCH) Recompiling...$(RESET)"
 	@$(MAKE)
+.PHONY: update
 
 # Recompile
 re: fclean all

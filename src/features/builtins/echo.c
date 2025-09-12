@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 13:22:11 by sede-san          #+#    #+#             */
-/*   Updated: 2025/08/03 02:15:38 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/08/05 09:22:15 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ static t_echo_flags	set_flags(
 
 	set_default_flags(&flags);
 	*i = 1;
+	if (!argv[1])
+		return (flags);
 	while (*argv[*i] == '-')
 	{
 		j = 1;

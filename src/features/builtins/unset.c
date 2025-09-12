@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/01 11:09:13 by sede-san          #+#    #+#             */
-/*   Updated: 2025/08/03 02:11:18 by sede-san         ###   ########.fr       */
+/*   Created: 2025/08/04 21:39:35 by sede-san          #+#    #+#             */
+/*   Updated: 2025/08/05 09:31:22 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	cd_builtin(
-	int argc,
-	char const *argv[])
+int	unset_builtin(int argc, char const *argv[], char **envp)
 {
-	char	*path;
-
-	if (argc == 1)
-		path = getenv("HOME");
-	else
-		path = (char *)argv[1];
-	if (chdir(path) != 0)
-		return (fprintf(stderr, "cd: %s\n", path), 1);
+	(void)argc;
+	(void)argv;
+	(void)envp;
+	printf("Not yet implemented\n");
 	return (0);
 }
