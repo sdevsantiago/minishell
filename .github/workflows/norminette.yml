@@ -1,0 +1,33 @@
+name: Norminette
+
+on:
+  push:
+
+jobs:
+  check-norminette:
+    name: Norminette
+    runs-on: ubuntu-latest
+    if: ${{ github.repository != 'sdevsantiago/42_project_template' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Norminette
+        run: pip install --upgrade norminette
+
+      - name: Show Version
+        run: norminette --version
+
+      - name: Run Norminette
+        run: norminette -R CheckForbiddenSourceHeader -R CheckDefine -R CheckLine -R CheckVariableName -R CheckFunctionName --use-gitignore > norminette-report.txt
+
+      - name: Upload Norminette report
+        uses: actions/upload-artifact@v4
+        with:
+          name: norminette-report
+          path: norminette-report.txt

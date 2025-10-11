@@ -1,0 +1,29 @@
+name: Makefile
+
+on:
+  push:
+
+jobs:
+  check-makefile:
+    name: Makefile
+    runs-on: ubuntu-latest
+    if: ${{ github.repository != 'sdevsantiago/42_project_template' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Prerequisites
+        run: sudo apt install build-essential
+
+      - name: Show Make Version
+        run: make --version
+
+      - name: Run Makefile
+        run: make > makefile-report.txt
+
+      - name: Upload Makefile report
+        uses: actions/upload-artifact@v4
+        with:
+          name: makefile-report
+          path: makefile-report.txt
+
