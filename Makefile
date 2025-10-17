@@ -6,7 +6,7 @@
 #    By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/30 20:22:21 by sede-san          #+#    #+#              #
-#    Updated: 2025/08/20 22:40:43 by sede-san         ###   ########.fr        #
+#    Updated: 2025/10/17 20:11:31 by sede-san         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,7 +70,6 @@ SRC = \
 	$(SRC_PATH)/features/builtins/printenv.c		\
 	$(SRC_PATH)/features/builtins/pwd.c				\
 	$(SRC_PATH)/features/builtins/unset.c			\
-	$(SRC_PATH)/utils/get_hostname.c				\
 	$(SRC_PATH)/utils/signals.c
 
 # Include path

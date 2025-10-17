@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 03:42:25 by sede-san          #+#    #+#             */
-/*   Updated: 2025/08/21 17:31:52 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/10/17 20:11:24 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,11 +117,6 @@ static int	minishell(t_minishell *minishell)
 		if (line)
 			free(line);
 		char	*prompt = NULL;
-		char	*hostname = get_hostname();
-		if (hostname)
-		{
-			free(hostname);
-		}
 		if (prompt)
 		{
 			line = readline(prompt);
