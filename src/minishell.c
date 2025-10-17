@@ -74,7 +74,6 @@ static t_minishell	init_minishell(
 	minishell.envp = (char **)malloc(n_env * sizeof(char *));
 	if (!minishell.envp && errno == ENOMEM)
 		return (clear_minishell(&minishell), minishell);
-	minishell.history_file = ft_strjoin(getenv("HOME"), "/"HISTORY_FILE);
 	return (minishell);
 }
 
@@ -117,15 +116,10 @@ static int	minishell(t_minishell *minishell)
 	{
 		if (line)
 			free(line);
-		char	*prompt;
+		char	*prompt = NULL;
 		char	*hostname = get_hostname();
 		if (hostname)
 		{
-			prompt = ft_strjoin_mul(12,
-				BOLD, BLUE_TEXT, getenv("USERNAME"), "@", hostname,
-				RESET, ":",
-				BOLD, GREEN_TEXT, getenv("PWD"),
-				RESET, "> ");
 			free(hostname);
 		}
 		if (prompt)

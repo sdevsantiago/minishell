@@ -69,7 +69,7 @@ static char	*resolve_cmd_path(char const *cmd, char const *path)
 	i = 0;
 	while (path_splitted[i])
 	{
-		abs_path = ft_strjoin_mul(
+		abs_path = ft_strnjoin(
 			3, (char *)path_splitted[i], "/", (char *)cmd);
 		if (access(abs_path, X_OK) != -1)
 			break ;

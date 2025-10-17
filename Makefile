@@ -206,7 +206,7 @@ ft_printf:
 GNL = get_next_line
 GNL_REPO = https://github.com/sdevsantiago/get_next_line.git
 GNL_PATH = $(LIB_PATH)/$(GNL)
-GNL_INCLUDE_PATH = $(GNL_PATH)
+GNL_INCLUDE_PATH = $(GNL_PATH)/include
 GNL_BIN = $(GNL_PATH)/get_next_line.a
 
 get_next_line:

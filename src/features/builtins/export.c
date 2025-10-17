@@ -26,7 +26,7 @@ int	export_builtin(int argc, char const *argv[], char **envp)
 		{
 			if (ft_strncmp(envp[i], env[0], ft_strlen(env[0])) == 0)
 			{
-				char *line = ft_strjoin_mul(3, env[0], "=", env[1]);
+				char *line = ft_strnjoin(3, env[0], "=", env[1]);
 				envp[i] = line;
 				break ;
 			}
