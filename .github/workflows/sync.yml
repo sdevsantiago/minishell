@@ -2,6 +2,7 @@ name: Update 42 repo
 
 on:
   push:
+    branches: main
 
 permissions:
   contents: write
