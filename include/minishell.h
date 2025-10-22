@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 16:35:10 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/20 20:20:30 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/10/22 16:59:56 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,25 @@
 # include <termios.h>			// tcsetattr(3), tcgetattr(3)
 # include <term.h>				// tgetent(3), tgetflag(3), tgetnum(3),
 								// tgetstr(3), tgoto(3), tputs(3)
+
+/******************************************************************************/
+/*                           Structures & Data Types                          */
+/******************************************************************************/
+
+typedef struct s_minishell	t_minishell;
+
+typedef struct s_minishell
+{
+	char			**env;
+	u_int8_t		exit_status;
+}	t_minishell;
+
+/* core/minishell.c */
+
+extern int		minishell_init(struct s_minishell *minishell, char **envp);
+
+extern u_int8_t	minishell_run(struct s_minishell *minishell);
+
+extern void		minishell_clear(struct s_minishell *minishell);
 
 #endif /* MINISHELL_H */
