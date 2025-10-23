@@ -2,6 +2,7 @@ name: Norminette
 
 on:
   push:
+    branches: main, develop
 
 jobs:
   check-norminette:
