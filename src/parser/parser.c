@@ -6,13 +6,12 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:37:38 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/23 14:07:20 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/10/23 22:53:35 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**expand_paths(char **argv);
 static char	**expand_envs(char **argv);
 static int	count_argv(char **argv);
 
@@ -24,27 +23,18 @@ char	*parse(
 
 	if (!line || !*line)
 		return (NULL);
+	(void)minishell;
 	command.argv = expand_envs(ft_split(line, SPACE));
 	command.argc = count_argv(command.argv);
 	if (!command.argc)
 		return (NULL);
 ////////////////////////////////////////////////////////////////////////////////
 	//* DEBUG
-	int	i = -1;
-	while (command.argv[++i])
-		printf("argv[%i]: %s\n", i, command.argv[i]);
-	ft_free_split(command.argv);
+	// int	i = -1;
+	// while (command.argv[++i])
+		// printf("argv[%i]: %s\n", i, command.argv[i]);
 ////////////////////////////////////////////////////////////////////////////////
 	return (NULL);
-}
-
-// not sure of this step here
-static char	**expand_paths(
-	char **argv
-){
-	if (!argv)
-		return (NULL);
-	return (argv);
 }
 
 static char	**expand_envs(
