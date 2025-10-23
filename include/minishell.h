@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 16:35:10 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/22 19:19:46 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/10/23 13:25:25 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "libft.h"
 # include "core.h"
+# include "parser.h"
+# include "chardefs.h"
 # include <readline/readline.h>	// readline(3), rl_clear_history(),
 								// rl_on_new_line(), rl_replace_line(),
 								// rl_redisplay()
