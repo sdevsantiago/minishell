@@ -56,6 +56,7 @@ minishell
 *.su
 *.idb
 *.pdb
+vgcore*
 
 # Kernel Module Compile Results
 *.mod*
