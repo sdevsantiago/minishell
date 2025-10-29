@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: padan-pe <padan-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 16:35:10 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/23 13:25:25 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/10/29 18:31:20 by padan-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
+# include "../lib/Libft/libft.h"
 # include "core.h"
 # include "parser.h"
 # include "chardefs.h"
@@ -39,4 +39,4 @@
 # include <term.h>				// tgetent(3), tgetflag(3), tgetnum(3),
 								// tgetstr(3), tgoto(3), tputs(3)
 
-#endif /* MINISHELL_H */
+#endif 
