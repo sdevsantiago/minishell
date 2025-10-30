@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 20:51:33 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/23 14:14:30 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/10/30 22:36:03 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,21 @@ int	minishell_init(
 u_int8_t	minishell_run(
 	t_minishell	*minishell
 ){
-	char	*line;
+	char		*line;
+	t_command	command;
 
-	while (1)
+	line = NULL;
+	while (!minishell->exit)
 	{
 		line = readline("minishell > ");
-		if (!*line)
+		if (*line)
 		{
-			free(line);
-			continue ;
+			add_history(line);
+			command = parse(line, minishell);
+			execute(command, minishell);
 		}
-		add_history(line);
-		parse(line, minishell);
-		if (!ft_strcmp(line, "exit"))
-			break ;
-		// printf("%s\n", line);
-		free(line);
+		ft_free((void **)&line);
 	}
-	free(line);
 	return (minishell->exit_status);
 }
 
