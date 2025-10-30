@@ -6,7 +6,7 @@
 #    By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/30 20:22:21 by sede-san          #+#    #+#              #
-#    Updated: 2025/10/20 12:14:43 by sede-san         ###   ########.fr        #
+#    Updated: 2025/10/28 20:14:44 by sede-san         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,8 @@ CFLAGS	= -Wall -Wextra -Werror
 HEADERS	= -I $(INCLUDE_PATH) $(LIBS_INCLUDE)
 
 ifeq ($(DEBUG), lldb) # debug with LLDB
+	CFLAGS	+= -g3
+else ifeq ($(DEBUG), valgrind) # debug with valgrind
 	CFLAGS	+= -g3
 else ifeq ($(DEBUG), address) # use AdressSanitize
 	CFLAGS	+= -fsanitize=address -g3
@@ -53,7 +55,7 @@ $(OBJS_PATH)/%.o: $(SRC_PATH)/%.c
 all: mandatory
 .PHONY: all
 
-mandatory: libft get_next_line $(NAME)
+mandatory: libft get_next_line ft_printf $(NAME)
 .PHONY: mandatory
 
 $(NAME): $(OBJS)
@@ -81,8 +83,8 @@ re: fclean all
 
 # ****************************** Libraries ********************************** #
 
-LIBS			= -lreadline $(LIBFT_NAME) $(GET_NEXT_LINE_NAME)
-LIBS_INCLUDE	= -I $(LIBFT_INCLUDE_PATH) -I $(GET_NEXT_LINE_INCLUDE_PATH)
+LIBS			= -lreadline $(LIBFT_NAME) $(GET_NEXT_LINE_NAME) $(FT_PRINTF_NAME)
+LIBS_INCLUDE	= -I $(LIBFT_INCLUDE_PATH) -I $(GET_NEXT_LINE_INCLUDE_PATH) -I $(FT_PRINTF_INCLUDE_PATH)
 LIBS_PATH		= lib
 
 # ** Libft ** #
@@ -133,6 +135,30 @@ $(GET_NEXT_LINE_NAME):
 		$(PRINT) "$(YELLOW)$(EMOJI_WRENCH) Compiling $(GET_NEXT_LINE)...$(RESET)";	\
 		$(MAKE) --silent -C $(GET_NEXT_LINE_PATH) all clean > /dev/null; 			\
 		$(PRINT) "$(GREEN)$(EMOJI_CHECK) $(GET_NEXT_LINE) compiled.$(RESET)";		\
+	fi
+
+# ** ft_printf **
+
+FT_PRINTF				= ft_printf
+FT_PRINTF_REPO			= https://github.com/sdevsantiago/ft_printf.git
+FT_PRINTF_PATH			= $(LIBS_PATH)/$(FT_PRINTF)
+FT_PRINTF_INCLUDE_PATH	= $(FT_PRINTF_PATH)/include
+FT_PRINTF_NAME			= $(FT_PRINTF_PATH)/libftprintf.a
+
+ft_printf: $(FT_PRINTF_NAME)
+.PHONY: ft_printf
+
+$(FT_PRINTF_NAME):
+	@if [ ! -d $(FT_PRINTF_PATH) ]; then \
+		$(PRINT) "$(YELLOW)$(EMOJI_WRENCH) Cloning $(FT_PRINTF)...$(RESET)";	\
+		git clone --quiet $(FT_PRINTF_REPO) $(FT_PRINTF_PATH);					\
+		rm -rf $(FT_PRINTF_PATH)/.git;											\
+		$(PRINT) "$(GREEN)$(EMOJI_CHECK) $(FT_PRINTF) cloned...$(RESET)";		\
+	fi
+	@if [ ! -f $(FT_PRINTF_NAME) ]; then \
+		$(PRINT) "$(YELLOW)$(EMOJI_WRENCH) Compiling $(FT_PRINTF)...$(RESET)";				\
+		$(MAKE) --silent -C $(FT_PRINTF_PATH) all clean LIBFT_PATH=../$(LIBFT) > /dev/null;	\
+		$(PRINT) "$(GREEN)$(EMOJI_CHECK) $(FT_PRINTF) compiled.$(RESET)";					\
 	fi
 
 # ***************************** Style variables ****************************** #
