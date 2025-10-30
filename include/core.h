@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 19:10:13 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/23 23:19:58 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:46:15 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 typedef struct s_minishell	t_minishell;
 typedef struct s_variables	t_variables;
+typedef struct s_command	t_command;
 
 /**
  * @brief Structure that holds both environment and internal variables
@@ -50,6 +51,23 @@ typedef struct s_minishell
 	t_variables	variables;
 	u_int8_t	exit_status;
 }	t_minishell;
+
+/**
+ * @brief Structure representing a single command in the shell
+ *
+ * This structure holds all the necessary information for executing a command
+ * in the minishell, including its arguments and executable path.
+ *
+ * @param argc Number of arguments in the command (including the command name)
+ * @param argv Array of strings containing the command and its arguments
+ * @param path Full path to the executable file for this command
+ */
+typedef struct s_command
+{
+	int		argc;
+	char	**argv;
+	char	*path;
+}	t_command;
 
 /******************************************************************************/
 /*                                 Functions                                  */

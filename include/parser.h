@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 19:03:51 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/23 13:31:09 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:44:51 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,11 @@
 # include "minishell.h"
 
 /******************************************************************************/
-/*                           Structures & Data Types                          */
-/******************************************************************************/
-
-typedef struct s_command	t_command;
-
-typedef struct s_command
-{
-	int		argc;
-	char	**argv;
-}	t_command;
-
-/******************************************************************************/
 /*                                 Functions                                  */
 /******************************************************************************/
 
 // parser.c
 
-extern char	*parse(char *line, t_minishell *minishell);
+extern t_command	parse(char *line, t_minishell *minishell);
 
 #endif /* PARSER_H */

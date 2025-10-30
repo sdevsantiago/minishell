@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 16:35:10 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/23 13:25:25 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:20:08 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include "ft_printf.h"
+# include "chardefs.h"
 # include "core.h"
 # include "parser.h"
-# include "chardefs.h"
+# include "executor.h"
+# include "builtins.h"
 # include <readline/readline.h>	// readline(3), rl_clear_history(),
 								// rl_on_new_line(), rl_replace_line(),
 								// rl_redisplay()
