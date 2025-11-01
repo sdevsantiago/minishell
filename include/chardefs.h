@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 13:23:25 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/29 17:13:45 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/11/01 20:36:57 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # define DOT '.'
 # define SLASH '/'
-# define BACKSLASH '\''
+# define BACKSLASH '\\'
 # define DOLLAR '$'
 # define SINGLE_QUOTE '\''
 # define DOUBLE_QUOTE '\"'
