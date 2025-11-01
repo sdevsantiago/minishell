@@ -6,7 +6,7 @@
 #    By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/30 20:22:21 by sede-san          #+#    #+#              #
-#    Updated: 2025/10/28 20:14:44 by sede-san         ###   ########.fr        #
+#    Updated: 2025/11/01 19:30:37 by sede-san         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,7 +84,7 @@ re: fclean all
 # ****************************** Libraries ********************************** #
 
 LIBS			= -lreadline $(LIBFT_NAME) $(GET_NEXT_LINE_NAME) $(FT_PRINTF_NAME)
-LIBS_INCLUDE	= -I $(LIBFT_INCLUDE_PATH) -I $(GET_NEXT_LINE_INCLUDE_PATH) -I $(FT_PRINTF_INCLUDE_PATH)
+LIBS_INCLUDE	= -I $(LIBFT_INCLUDE_PATH) -I $(GET_NEXT_LINE_INCLUDE_PATH) -I $(FT_PRINTF_INCLUDE_PATH) -I $(FT_ARGS_INCLUDE_PATH)
 LIBS_PATH		= lib
 
 # ** Libft ** #
@@ -159,6 +159,25 @@ $(FT_PRINTF_NAME):
 		$(PRINT) "$(YELLOW)$(EMOJI_WRENCH) Compiling $(FT_PRINTF)...$(RESET)";				\
 		$(MAKE) --silent -C $(FT_PRINTF_PATH) all clean LIBFT_PATH=../$(LIBFT) > /dev/null;	\
 		$(PRINT) "$(GREEN)$(EMOJI_CHECK) $(FT_PRINTF) compiled.$(RESET)";					\
+	fi
+
+# ** ft_args **
+
+FT_ARGS					= ft_args
+FT_ARGS_REPO			= https://github.com/sdevsantiago/ft_args.git
+FT_ARGS_PATH			= $(LIBS_PATH)/$(FT_ARGS)
+FT_ARGS_INCLUDE_PATH	= $(FT_ARGS_PATH)
+FT_ARGS_NAME			= $(FT_ARGS_PATH)/$(FT_ARGS).h
+
+ft_args: $(FT_ARGS_NAME)
+.PHONY: ft_args
+
+$(FT_ARGS_NAME):
+	@if [ ! -d $(FT_ARGS_PATH) ]; then \
+		$(PRINT) "$(YELLOW)$(EMOJI_WRENCH) Cloning $(FT_ARGS)...$(RESET)";	\
+		git clone --quiet $(FT_ARGS_REPO) $(FT_ARGS_PATH);					\
+		rm -rf $(FT_ARGS_PATH)/.git;										\
+		$(PRINT) "$(GREEN)$(EMOJI_CHECK) $(FT_ARGS) cloned...$(RESET)";		\
 	fi
 
 # ***************************** Style variables ****************************** #
