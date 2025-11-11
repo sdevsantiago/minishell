@@ -6,7 +6,7 @@
 /*   By: padan-pe <padan-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 19:03:51 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/29 19:06:48 by padan-pe         ###   ########.fr       */
+/*   Updated: 2025/11/11 15:10:29 by padan-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,11 @@ typedef struct s_command
 	int		argc;
 	char	**argv;
 	int		type;
-	char	*name;
-	//puntero hacia deante
-	//puntero hacia atrás
 	
 }	t_command;
 
 
-enum	tokens
+enum	e_token
 {
 	TEXT,
 	PIPE,
@@ -39,7 +36,7 @@ enum	tokens
 	R2,
 	R11,
 	R22,
-};
+}	t_token;
 
 /******************************************************************************/
 /*                                 Functions                                  */
