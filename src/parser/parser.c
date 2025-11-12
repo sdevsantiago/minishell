@@ -6,7 +6,7 @@
 /*   By: padan-pe <padan-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:37:38 by sede-san          #+#    #+#             */
-/*   Updated: 2025/11/11 18:17:25 by padan-pe         ###   ########.fr       */
+/*   Updated: 2025/11/12 16:30:38 by padan-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,18 @@
 
 void	ft_parse(char *line)
 {
-	t_list	*command;
-	int		quote_flag;// 0 = no hay comillas, 1 = hay comillas, 2 = comillas sin cerrar
+	t_list	**command;
+	int		quote_flag;// 0 = comillas si cerrar 1 = comillas cerradas/sin comillas
 	if (!line || !line[0])
 		return (NULL);
-	command = ft_init_list();
-	quote_flag = ft_quote_unquote(line);
-	if (quote_flag == 2)
+	quote_flag = ft_quote_detecter(line);
+	if (quote_flag == 0)
 		exit(1);
-	if (quote_flag == 0)//si no hay comillas 
-	//1. emepzar a leer hasta encontrar (mientras no haya comillas) un pipe / redirección / null 
-	//2. ir guardando en el argv (si hya comillas empezar a guardar en argv[0])
-	//3. si hay variables de entorno ver si se tiene que expandir y expandirlas/no expandirlas
-	
-
-}
-t_list	*ft_init_list()
-{
-	t_list	*node;
-	t_command *model;
-
-	model->argc = 0;
-	model->argv = NULL;
-	model->type = 0;
-	node = ft_lstnew(model);
-	return (node);
+	if (quote_flag == 1)
+		command = ft_com_creater(command, line);
 }
 
-int ft_quote_unquote(char *line)
+int ft_quote_detecter(char *line)
 {
 	int	result;
 	int aux;
@@ -94,7 +78,7 @@ int ft_door( char *line)//comillas abiertas o cerradas
 	return (n);
 }
 
-t_list	*ft_split_0(t_list **command, char *line)
+t_list	**ft_com_creater(t_list **command, char *line)//con comillas
 {
 	int i;
 	int j;
@@ -102,27 +86,15 @@ t_list	*ft_split_0(t_list **command, char *line)
 	t_command	*aux;
 
 	i = 0;
-	j = 0;
-	k = 0;
 	while(line[i])
 	{
-/* 		while (line[i] != '|' || line [i] != '<' || line[i] != '>')//tengo que repasar el push swap pq no me acuerod de las lsitas
-		{
-			if (ft_isspace(line[i]))
-			{
-				j++;
-				k = 0;
-				while (ft_isspace(line[i]))
-					i++;
-			}
-			command->content->argv[j][k] == line[i];
-			command->content->type = TEXT;
-			i++;
-			k++;
-		} */
+		j = -1;
+		k = -1;
+		
 		if (line[i] == '|')//si es espcial guardar -> hacer ft propia
 		{
-			aux->argv[0][0] == line[i];
+			aux->argv[0][0] = line[i];
+			aux->argc = 1;
 			aux->type = PIPE;
 			ft_lstadd_back(command, ft_lstnew(aux));
 			i++;
@@ -130,6 +102,7 @@ t_list	*ft_split_0(t_list **command, char *line)
 		else if (line[i] == '>' && line[i + 1] != '>')
 		{
 			aux->argv[0][0] == line[i];
+			aux->argc = 1;
 			aux->type = R1;
 			ft_lstadd_back(command, ft_lstnew(aux));
 			i++;
@@ -138,6 +111,7 @@ t_list	*ft_split_0(t_list **command, char *line)
 		{
 			aux->argv[0][0] == line[i];
 			aux->argv[0][1] == line[i + 1];
+			aux->argc = 1;
 			aux->type = R11;
 			ft_lstadd_back(command, ft_lstnew(aux));
 			i = i + 2;
@@ -146,6 +120,7 @@ t_list	*ft_split_0(t_list **command, char *line)
 		{
 			aux->argv[0][0] == line[i];
 			aux->type = R2;
+			aux->argc = 1;
 			ft_lstadd_back(command, ft_lstnew(aux));
 			i++;
 		}
@@ -157,96 +132,53 @@ t_list	*ft_split_0(t_list **command, char *line)
 			ft_lstadd_back(command, ft_lstnew(aux));
 			i = i + 2;
 		}
-	}
-}
-/* void	ft_divider(t_command *com, char *line)
-{
-	int i;
-	int j;
-	int c;
-	t_command	*aux;
-	
-	i = 0;
-	j = 0;
-	while (line[i])
-	{
-		char *aux;
-		if (line[i] == DOUBLE_QUOTE)
+		else//ver cuando expando
 		{
-			i++;
-			while (line[i] != DOUBLE_QUOTE && line[i])
+			if (line[i] == DOUBLE_QUOTE)
 			{
-				aux[j] = line[i];
 				i++;
 				j++;
-			}
-			if (!line[i])
-				break ;
-			com->name = aux;//luego hago esto
-			com->type = TEXT;
-			ft_comadd_back(&com, aux);
-			free(aux);
-			
-		}
-		else if (line[i] == SINGLE_QUOTE)
-		{
-			i++;
-			while (line[i] != SINGLE_QUOTE && line[i])
-			{
-				aux[j] = line[i];
-				i++;
-				j++;
-			}
-			if (!line[i])
-				break ;
-			com->name = aux;//luego hago esto
-			com->type = TEXT;
-			ft_comadd_back(&com, aux);
-			free(aux);
-		}
-		else if (line[i] == SPACE)//o tabulador o algo asi
-		{
-			while (line[i] == SPACE && line[i])
-				i++;
-		}
-		else if (line[i] == '|' || line[i] == '>' || line[i] == '<')//comprobar si es pie o redirección o klk
-		{
-			if (line[i] == '|')
-			{
-				com->name = line[i];//luego hago esto
-				com->type = PIPE;
-				ft_comadd_back(&com, aux);
-			}
-			if (line[i] == '>')
-			{ 
-				if (line[i + 1] == '<')
-					break ;
-				if(line[i + 1] != '>')
+				while(line[i] != DOUBLE_QUOTE)
 				{
-					com->name = ">>";//luego hago esto
-					com->type = R11;
-					ft_comadd_back(&com, aux);
-					i = i + 2;
+					aux->argv[j][++k] = line[i];
+					i++;
 				}
-				com->name = '>';//luego hago esto
-				com->type = R1;
-				ft_comadd_back(&com, aux);
+				i++;
+			}
+			if (line[i] == SINGLE_QUOTE)
+			{
+				i++;
+				j++;
+				while(line[i] != SINGLE_QUOTE)
+				{
+					aux->argv[j][++k] = line[i];
+					i++;
+				}
+				i++;
 			}
 			
+			while(line[i] != '|' && line[i] != '>' && line[i] != '<')
+			{
+				j++;
+				while(!ft_isspace(line[i]))
+					aux->argv[j][++k] = line[i];
+				if (ft_isspace(line[i]))
+					i++;
+			}
+			aux->argc = j + 1;
+			aux->type = TEXT;
+			ft_lstadd_back(command, ft_lstnew(aux));
 		}
-		i++;
 	}
-} */
-
-
-
+	return(command);
+}
 /* 
 static char	**expand_envs(char **argv);
 static int	count_argv(char **argv);
 
 void parse(char *line, t_minishell *minishell)
 {
-	t_command	command;// argc y argv y ¿flag para eoandir?
+	t_command	command;
 
 	if (!line || !line[0])
 		return (NULL);
@@ -309,58 +241,4 @@ static int	count_argv(char **argv)
 		i++;
 	return (i);
 }
-
-char	*ft_cleaner(char *line)//una vez sabiendo que hay y que están cerradas
-{
-	int i;
-	int n;
-	char *aux;
-	
-	n = -1;
-	i = -1;
-	aux = malloc(strlen(line));
-	while (line[++i])
-	{
-		if (line[i] == SINGLE_QUOTE)
-		{
-			while (line[++i] != SINGLE_QUOTE && line[i])
-				aux[++n] = line[i];
-		}
-		else if (line[i] == DOUBLE_QUOTE)
-		{
-			while (line[++i] != DOUBLE_QUOTE && line[i])
-				aux[++n] = line[i];
-		}
-		else
-			aux[++n] = line[i];
-	}
-	return (aux);
-}
-
-void	ft_expand(char *line, int flag)//asumiendo que hay y que están cerradas 1 = expandir 0 = no epandir
-{
-	int i;
-
-	i = 0;
-	if (!ft_strchr(line, DOLLAR))
-		return (flag);
-	while (line[i])
-	{
-		if (line[i] == SINGLE_QUOTE)
-		{
-			i++;
-			while (line[i] != SINGLE_QUOTE)
-				i++;
-			if (line[i] == SINGLE_QUOTE)
-				flag = 0;
-		}
-		else if (line[i] == DOUBLE_QUOTE)
-		{
-			while (line[++i] != DOUBLE_QUOTE && line[i])
-				i++;
-		}
-		i++;
-	}
-}
-
- */
+*/
