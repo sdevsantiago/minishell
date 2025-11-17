@@ -6,7 +6,7 @@
 /*   By: padan-pe <padan-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:37:38 by sede-san          #+#    #+#             */
-/*   Updated: 2025/11/14 19:51:04 by padan-pe         ###   ########.fr       */
+/*   Updated: 2025/11/17 17:20:04 by padan-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,19 +95,23 @@ t_list	**ft_lstcreater(t_list **command, char *line)
 	int i;
 	int j;
 	int k;
-	t_command	aux;
+	t_command	*aux;
 
+	(*command)->content = (t_command *)(*command)->content;
+	aux->argv = (*command)->content;
+	aux->argc = 0;
+	aux->type = 0;
 	i = 0;
 	while(line[i])
 	{
 		j = -1;
 		k = 0;
 		if (line[i] == '|')
-			ft_parse_pipe(&aux, command, line, &i);
+			ft_parse_pipe(aux, command, line, &i);
 		else if (line[i] == '>')
-			ft_parse_r1(&aux, command, line, &i);
+			ft_parse_r1(aux, command, line, &i);
 		else if (line[i] == '<')
-			ft_parse_r2(&aux, command, line, &i);
+			ft_parse_r2(aux, command, line, &i);
 		else//ver cuando expando
 		{
 			if (line[i] == DOUBLE_QUOTE)
@@ -116,7 +120,7 @@ t_list	**ft_lstcreater(t_list **command, char *line)
 				j++;
 				while(line[i] != DOUBLE_QUOTE)
 				{
-					aux.argv[j][++k] = line[++i];
+					aux->argv[j][++k] = line[++i];
 					i++;
 				}
 				i++;
@@ -127,7 +131,7 @@ t_list	**ft_lstcreater(t_list **command, char *line)
 				j++;
 				while(line[i] != SINGLE_QUOTE)
 				{
-					aux.argv[j][++k] = line[i];
+					aux->argv[j][++k] = line[i];
 					i++;
 				}
 				i++;
@@ -137,16 +141,16 @@ t_list	**ft_lstcreater(t_list **command, char *line)
 				j++;
 				while(!ft_isspace(line[i]))
 				{
-					aux.argv[j][k] = line[i];
-					printf("%c\n", aux.argv[j][k]);
+					aux->argv[j][k] = line[i];
+					printf("%c\n", aux->argv[j][k]);
 					k++;
 					i++;
 				}
 				while (ft_isspace(line[i]))
 					i++;
 			}
-			aux.argc = j + 1;
-			aux.type = TEXT;
+			aux->argc = j + 1;
+			aux->type = TEXT;
 			ft_lstadd_back(command, ft_lstnew(&aux));
 		}
 	}
