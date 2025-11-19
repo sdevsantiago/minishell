@@ -6,38 +6,32 @@
 /*   By: padan-pe <padan-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:37:38 by sede-san          #+#    #+#             */
-/*   Updated: 2025/11/17 17:20:04 by padan-pe         ###   ########.fr       */
+/*   Updated: 2025/11/19 18:47:07 by padan-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include "../../lib/Libft/libft.h"
-
+#include "../../include/parser.h"
 
 void	ft_parse(char *line)
 {
-	t_list	**command;
+	t_minilist	*command;
 	int		quote_flag;
 	int		i;
-	t_command	*aux;
 
+	i = 0;
 	if (!line || !line[0])
 		exit(1);
 	quote_flag = ft_quote_detecter(line);
 	if (quote_flag == 0)
 		exit(1);
 	if (quote_flag == 1)
-		command = ft_lstcreater(command, line);
-	while(*command)
+		(command) = ft_minilstcreater(line);
+	while((command)->content->argv[i])
 	{
-		aux = (*command)->content;
-		i = 0;
-		while(aux->argv[i])
-		{
-			printf("argumento:%s\n", aux->argv[i]);
-			i++;
-		}
-		*command = (*command)->next;
+		printf("argumento: %s\n", (command)->content->argv[i]);
+		i++;
 	}
 }
 
@@ -48,10 +42,10 @@ int ft_quote_detecter(char *line)
 
 	aux = 0;
 	result = 1;
-	if (strchr(line, SINGLE_QUOTE) || strchr(line, DOUBLE_QUOTE))
+	if (ft_strchr(line, SINGLE_QUOTE) || ft_strchr(line, DOUBLE_QUOTE))
 	{
-		ft_door(aux, line);
-		if (aux != 0 && aux % 2 == 0)
+		ft_door(&aux, line);
+		if (aux % 2 == 0)
 			result = 1;
 		else if (aux % 2 != 0)
 		{
@@ -62,56 +56,55 @@ int ft_quote_detecter(char *line)
 	return (result);
 }
 
-void ft_door(int n, char *line)
+void ft_door(int *n, char *line)
 {
 	int i;
 	
-	i = -1;
-	while (line[++i])
+	i = 0;
+	while (line[i])
 	{
 		if (line[i] == SINGLE_QUOTE)
 		{
-			n++;
+			(*n)++;
 			i++;
 			while (line[i] != SINGLE_QUOTE && line[i])
-				i++;
+			i++;
 			if (line[i] == SINGLE_QUOTE)
-				n++;
+			(*n)++;
 		}
 		if (line[i] == DOUBLE_QUOTE)
 		{
-			n++;
+			(*n)++;
 			i++;
 			while (line[i] != DOUBLE_QUOTE && line[i])
-				i++;
+			i++;
 			if (line[i] == DOUBLE_QUOTE)
-				n++;
+			(*n)++;
 		}
+		i++;
 	}
+	printf("%s\n", line);
 }
 
-t_list	**ft_lstcreater(t_list **command, char *line)
+t_minilist	*ft_minilstcreater(char *line)
 {
 	int i;
 	int j;
 	int k;
-	t_command	*aux;
+	t_minilist *result;
 
-	(*command)->content = (t_command *)(*command)->content;
-	aux->argv = (*command)->content;
-	aux->argc = 0;
-	aux->type = 0;
+	(result) = ft_minilstnew(ft_minicommandnew());
 	i = 0;
 	while(line[i])
 	{
 		j = -1;
 		k = 0;
 		if (line[i] == '|')
-			ft_parse_pipe(aux, command, line, &i);
+			ft_parse_pipe(result->content, &result, line, &i);
 		else if (line[i] == '>')
-			ft_parse_r1(aux, command, line, &i);
+			ft_parse_r1(result->content, &result, line, &i);
 		else if (line[i] == '<')
-			ft_parse_r2(aux, command, line, &i);
+			ft_parse_r2(result->content, &result, line, &i);
 		else//ver cuando expando
 		{
 			if (line[i] == DOUBLE_QUOTE)
@@ -120,7 +113,7 @@ t_list	**ft_lstcreater(t_list **command, char *line)
 				j++;
 				while(line[i] != DOUBLE_QUOTE)
 				{
-					aux->argv[j][++k] = line[++i];
+					result->content->argv[j][++k] = line[++i];
 					i++;
 				}
 				i++;
@@ -131,42 +124,46 @@ t_list	**ft_lstcreater(t_list **command, char *line)
 				j++;
 				while(line[i] != SINGLE_QUOTE)
 				{
-					aux->argv[j][++k] = line[i];
+					result->content->argv[j][++k] = line[i];
 					i++;
 				}
 				i++;
 			}
-			while (line[i] != '|' && line[i] != '>' && line[i] != '<')
+			while (line[i] != '|' && line[i] != '>' && line[i] != '<' && line[i])
 			{
 				j++;
-				while(!ft_isspace(line[i]))
+				result->content->argv[j] = malloc(sizeof(char) * ft_strlen(line));
+				while(!ft_isspace(line[i]) && line[i])
 				{
-					aux->argv[j][k] = line[i];
-					printf("%c\n", aux->argv[j][k]);
+					//hacer aqui una funciona para contaar lo que se necsita examctamete en el lloc ???? nose
+					result->content->argv[j][k] = line[i];
+					printf("%c\n", result->content->argv[j][k]);
 					k++;
 					i++;
 				}
-				while (ft_isspace(line[i]))
+				result->content->argv[j][k] = '\0';
+				while (ft_isspace(line[i]) && line[i])
 					i++;
 			}
-			aux->argc = j + 1;
-			aux->type = TEXT;
-			ft_lstadd_back(command, ft_lstnew(&aux));
+			result->content->argc = j + 1;
+			result->content->type = TEXT;
+			ft_minilstadd_back(&result, ft_minilstnew(result->content));
 		}
 	}
-	return(command);
+	return(result);
 }
 
-void	ft_parse_pipe(t_command *aux, t_list **command, char *line, int *i)
+void	ft_parse_pipe(t_command *aux, t_minilist **command, char *line, int *i)
 {
 	aux->argv[0][0] = line[*i];
 	aux->argc = 1;
 	aux->type = PIPE;
 	(*i)++;
-	ft_lstadd_back(command, ft_lstnew(aux));
+	printf("%c\n", aux->argv[0][0]);
+	ft_minilstadd_back(command, ft_minilstnew(aux));
 }
 
-void	ft_parse_r1(t_command *aux, t_list **command, char *line, int *i)
+void	ft_parse_r1(t_command *aux, t_minilist **command, char *line, int *i)
 {
 	if (line[*i + 1] != '>')
 	{
@@ -174,7 +171,8 @@ void	ft_parse_r1(t_command *aux, t_list **command, char *line, int *i)
 		aux->argc = 1;
 		aux->type = R1;
 		(*i)++;
-		ft_lstadd_back(command, ft_lstnew(aux));
+		printf("%c\n", aux->argv[0][0]);
+		ft_minilstadd_back(command, ft_minilstnew(aux));
 	}
 	else if (line[*i + 1] == '>')
 	{
@@ -183,11 +181,13 @@ void	ft_parse_r1(t_command *aux, t_list **command, char *line, int *i)
 		aux->argc = 1;
 		aux->type = R11;
 		*i = (*i) + 2;
-		ft_lstadd_back(command, ft_lstnew(aux));
+		printf("%c\n", aux->argv[0][0]);
+		printf("%c\n", aux->argv[0][1]);
+		ft_minilstadd_back(command, ft_minilstnew(aux));
 	}
 }
 
-void	ft_parse_r2(t_command *aux, t_list **command, char *line, int *i)
+void	ft_parse_r2(t_command *aux, t_minilist **command, char *line, int *i)
 {
 	if (line[*i + 1] != '<')
 	{
@@ -195,7 +195,8 @@ void	ft_parse_r2(t_command *aux, t_list **command, char *line, int *i)
 		aux->argc = 1;
 		aux->type = R1;
 		(*i)++;
-		ft_lstadd_back(command, ft_lstnew(aux));
+		printf("%c\n", aux->argv[0][0]);
+		ft_minilstadd_back(command, ft_minilstnew(aux));
 	}
 	else if (line[*i + 1] == '<')
 	{
@@ -204,13 +205,64 @@ void	ft_parse_r2(t_command *aux, t_list **command, char *line, int *i)
 		aux->argc = 1;
 		aux->type = R11;
 		*i = (*i) + 2;
-		ft_lstadd_back(command, ft_lstnew(aux));
+		printf("%c\n", aux->argv[0][0]);
+		printf("%c\n", aux->argv[0][1]);
+		ft_minilstadd_back(command, ft_minilstnew(aux));
 	}
+}
+
+t_minilist	*ft_minilstnew(t_command *content)
+{
+	t_minilist	*node;
+
+	node = (t_minilist *)malloc(sizeof(t_minilist));
+	if (!node)
+		return (NULL);
+	node->content = content;
+	node->next = NULL;
+	return (node);
+}
+
+t_command	*ft_minicommandnew()
+{
+	t_command	*node;
+
+	node = (t_command *)malloc(sizeof(t_command));
+	if (!node)
+		return (NULL);
+	node->argc = 0;
+	node->type = 0;
+	node->argv = malloc(sizeof(char *) * 100);
+	return (node);
+}
+
+void	ft_minilstadd_back(t_minilist **lst, t_minilist *new)
+{
+	t_minilist	*lst_ptr;
+
+	if (!lst || !new)
+		return ;
+	if (!*lst)
+		*lst = new;
+	else
+	{
+		lst_ptr = ft_minilstlast(*lst);
+		lst_ptr->next = new;
+	}
+}
+
+t_minilist	*ft_minilstlast(t_minilist *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
 }
 
 int	main()
 {
-	char *line = "echo hola > ls -la";
+	char *line = "echo hol\"a > ls -la";
 	ft_parse(line);
 }
 /* 
