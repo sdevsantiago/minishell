@@ -6,17 +6,17 @@
 /*   By: padan-pe <padan-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 15:26:31 by padan-pe          #+#    #+#             */
-/*   Updated: 2025/11/19 15:34:14 by padan-pe         ###   ########.fr       */
+/*   Updated: 2025/11/25 16:48:20 by padan-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../../include/parser.h"
 
 t_minilist	*ft_minilstnew(t_command *content)
 {
-	t_list	*node;
+	t_minilist	*node;
 
-	node = (t_list *)malloc(sizeof(t_list));
+	node = (t_minilist *)malloc(sizeof(t_minilist));
 	if (!node)
 		return (NULL);
 	node->content = content;
@@ -34,7 +34,7 @@ void	ft_minilstadd_back(t_minilist **lst, t_minilist *new)
 		*lst = new;
 	else
 	{
-		lst_ptr = ft_lstlast(*lst);
+		lst_ptr = ft_minilstlast(*lst);
 		lst_ptr->next = new;
 	}
 }
@@ -46,4 +46,17 @@ t_minilist	*ft_minilstlast(t_minilist *lst)
 	while (lst->next)
 		lst = lst->next;
 	return (lst);
+}
+
+t_command	*ft_minicommandnew()
+{
+	t_command	*node;
+
+	node = (t_command *)malloc(sizeof(t_command));
+	if (!node)
+		return (NULL);
+	node->argc = 0;
+	node->type = 0;
+	node->argv = malloc(sizeof(char *) * 100);
+	return (node);
 }

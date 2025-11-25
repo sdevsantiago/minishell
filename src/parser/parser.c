@@ -6,7 +6,7 @@
 /*   By: padan-pe <padan-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:37:38 by sede-san          #+#    #+#             */
-/*   Updated: 2025/11/19 18:47:07 by padan-pe         ###   ########.fr       */
+/*   Updated: 2025/11/25 16:57:41 by padan-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	ft_parse(char *line)
 		exit(1);
 	if (quote_flag == 1)
 		(command) = ft_minilstcreater(line);
-	while((command)->content->argv[i])
+	while((command)->content->argv[i])//solo me impprime eso pq esta colocado en lo ultimo
 	{
 		printf("argumento: %s\n", (command)->content->argv[i]);
 		i++;
@@ -44,7 +44,7 @@ int ft_quote_detecter(char *line)
 	result = 1;
 	if (ft_strchr(line, SINGLE_QUOTE) || ft_strchr(line, DOUBLE_QUOTE))
 	{
-		ft_door(&aux, line);
+		ft_door(&aux, line, 0);
 		if (aux % 2 == 0)
 			result = 1;
 		else if (aux % 2 != 0)
@@ -56,34 +56,37 @@ int ft_quote_detecter(char *line)
 	return (result);
 }
 
-void ft_door(int *n, char *line)
+void ft_door(int *n, char *line, int i)
 {
-	int i;
-	
-	i = 0;
 	while (line[i])
 	{
 		if (line[i] == SINGLE_QUOTE)
 		{
-			(*n)++;
 			i++;
+			(*n)++;
 			while (line[i] != SINGLE_QUOTE && line[i])
-			i++;
+				i++;
 			if (line[i] == SINGLE_QUOTE)
-			(*n)++;
+			{
+				(*n)++;
+				i++;
+			}
 		}
-		if (line[i] == DOUBLE_QUOTE)
+		else if (line[i] == DOUBLE_QUOTE)
 		{
-			(*n)++;
 			i++;
+			(*n)++;
 			while (line[i] != DOUBLE_QUOTE && line[i])
-			i++;
+				i++;
 			if (line[i] == DOUBLE_QUOTE)
-			(*n)++;
+			{
+				(*n)++;
+				i++;
+			}
 		}
-		i++;
+		else
+			i++;
 	}
-	printf("%s\n", line);
 }
 
 t_minilist	*ft_minilstcreater(char *line)
@@ -108,36 +111,17 @@ t_minilist	*ft_minilstcreater(char *line)
 		else//ver cuando expando
 		{
 			if (line[i] == DOUBLE_QUOTE)
-			{
-				i++;
-				j++;
-				while(line[i] != DOUBLE_QUOTE)
-				{
-					result->content->argv[j][++k] = line[++i];
-					i++;
-				}
-				i++;
-			}
+				ft_parse_doubleq(&i, &j, &k, line, result->content->argv);
 			if (line[i] == SINGLE_QUOTE)
-			{
-				i++;
-				j++;
-				while(line[i] != SINGLE_QUOTE)
-				{
-					result->content->argv[j][++k] = line[i];
-					i++;
-				}
-				i++;
-			}
+				ft_parse_singleq(&i, &j, &k, line, result);
 			while (line[i] != '|' && line[i] != '>' && line[i] != '<' && line[i])
 			{
 				j++;
 				result->content->argv[j] = malloc(sizeof(char) * ft_strlen(line));
+				k = 0;
 				while(!ft_isspace(line[i]) && line[i])
 				{
-					//hacer aqui una funciona para contaar lo que se necsita examctamete en el lloc ???? nose
 					result->content->argv[j][k] = line[i];
-					printf("%c\n", result->content->argv[j][k]);
 					k++;
 					i++;
 				}
@@ -159,7 +143,6 @@ void	ft_parse_pipe(t_command *aux, t_minilist **command, char *line, int *i)
 	aux->argc = 1;
 	aux->type = PIPE;
 	(*i)++;
-	printf("%c\n", aux->argv[0][0]);
 	ft_minilstadd_back(command, ft_minilstnew(aux));
 }
 
@@ -171,7 +154,6 @@ void	ft_parse_r1(t_command *aux, t_minilist **command, char *line, int *i)
 		aux->argc = 1;
 		aux->type = R1;
 		(*i)++;
-		printf("%c\n", aux->argv[0][0]);
 		ft_minilstadd_back(command, ft_minilstnew(aux));
 	}
 	else if (line[*i + 1] == '>')
@@ -181,8 +163,6 @@ void	ft_parse_r1(t_command *aux, t_minilist **command, char *line, int *i)
 		aux->argc = 1;
 		aux->type = R11;
 		*i = (*i) + 2;
-		printf("%c\n", aux->argv[0][0]);
-		printf("%c\n", aux->argv[0][1]);
 		ft_minilstadd_back(command, ft_minilstnew(aux));
 	}
 }
@@ -195,7 +175,6 @@ void	ft_parse_r2(t_command *aux, t_minilist **command, char *line, int *i)
 		aux->argc = 1;
 		aux->type = R1;
 		(*i)++;
-		printf("%c\n", aux->argv[0][0]);
 		ft_minilstadd_back(command, ft_minilstnew(aux));
 	}
 	else if (line[*i + 1] == '<')
@@ -205,10 +184,35 @@ void	ft_parse_r2(t_command *aux, t_minilist **command, char *line, int *i)
 		aux->argc = 1;
 		aux->type = R11;
 		*i = (*i) + 2;
-		printf("%c\n", aux->argv[0][0]);
-		printf("%c\n", aux->argv[0][1]);
 		ft_minilstadd_back(command, ft_minilstnew(aux));
 	}
+}
+
+void	ft_parse_doubleq(int *i, int *j, int *k, char *line, char **argv)
+{
+	
+	(*i)++;
+	(*j)++;
+	while(line[*i] != DOUBLE_QUOTE)
+	{
+		argv[*j][*k] = line[*i];//pq no puedo accedar al argv????
+		printf("hola\n");
+		(*k)++;
+		(*i)++;
+	}
+	(*i)++;
+}
+
+void	ft_parse_singleq(int *i, int *j, int *k, char *line, t_minilist *result)
+{
+		(*i)++;
+	(*j)++;
+	while(line[*i] != SINGLE_QUOTE)
+	{
+		result->content->argv[*j][++(*k)] = line[++(*i)];
+		(*i)++;
+	}
+	(*i)++;
 }
 
 t_minilist	*ft_minilstnew(t_command *content)
@@ -262,7 +266,7 @@ t_minilist	*ft_minilstlast(t_minilist *lst)
 
 int	main()
 {
-	char *line = "echo hol\"a > ls -la";
+	char *line = "\"echo -\" hola";
 	ft_parse(line);
 }
 /* 
