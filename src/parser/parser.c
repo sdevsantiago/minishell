@@ -6,7 +6,7 @@
 /*   By: padan-pe <padan-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:37:38 by sede-san          #+#    #+#             */
-/*   Updated: 2025/11/25 16:57:41 by padan-pe         ###   ########.fr       */
+/*   Updated: 2025/11/28 16:21:17 by padan-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ void	ft_parse(char *line)
 	if (quote_flag == 0)
 		exit(1);
 	if (quote_flag == 1)
-		(command) = ft_minilstcreater(line);
-	while((command)->content->argv[i])//solo me impprime eso pq esta colocado en lo ultimo
+		command = ft_minilstcreater(line);
+	while(command->content->argv[i])//solo me impprime eso pq esta colocado en lo ultimo
 	{
-		printf("argumento: %s\n", (command)->content->argv[i]);
+		printf("argumento: %s\n", command->content->argv[i]);
 		i++;
 	}
 }
@@ -111,11 +111,39 @@ t_minilist	*ft_minilstcreater(char *line)
 		else//ver cuando expando
 		{
 			if (line[i] == DOUBLE_QUOTE)
-				ft_parse_doubleq(&i, &j, &k, line, result->content->argv);
-			if (line[i] == SINGLE_QUOTE)
-				ft_parse_singleq(&i, &j, &k, line, result);
-			while (line[i] != '|' && line[i] != '>' && line[i] != '<' && line[i])
 			{
+				// ft_parse_doubleq(&i, &j, &k, line, result->content->argv);
+				i++;
+				j++;
+				result->content->argv[j] = malloc(sizeof(char) * ft_strlen(line));
+				while(line[i] != DOUBLE_QUOTE)
+				{
+					result->content->argv[j][k] = line[i];
+					k++;
+					i++;
+				}
+				result->content->argv[j][k] = '\0';
+				i++;
+			}
+			else if (line[i] == SINGLE_QUOTE)
+			{
+				// ft_parse_singleq(&i, &j, &k, line, result);
+				i++;
+				j++;
+				result->content->argv[j] = malloc(sizeof(char) * ft_strlen(line));
+				while(line[i] != SINGLE_QUOTE)
+				{
+					result->content->argv[j][k] = line[i];
+					k++;
+					i++;
+				}
+				result->content->argv[j][k] = '\0';
+				i++;
+			}
+			while (line[i] != '|' && line[i] != '>' && line[i] != '<' && line[i] && line[i] != SINGLE_QUOTE && line[i] != DOUBLE_QUOTE)
+			{
+				while (ft_isspace(line[i]) && line[i])
+					i++;
 				j++;
 				result->content->argv[j] = malloc(sizeof(char) * ft_strlen(line));
 				k = 0;
@@ -126,14 +154,15 @@ t_minilist	*ft_minilstcreater(char *line)
 					i++;
 				}
 				result->content->argv[j][k] = '\0';
-				while (ft_isspace(line[i]) && line[i])
-					i++;
+				
 			}
 			result->content->argc = j + 1;
 			result->content->type = TEXT;
 			ft_minilstadd_back(&result, ft_minilstnew(result->content));
 		}
 	}
+	j++;
+	result->content->argv[j] = NULL;
 	return(result);
 }
 
@@ -188,9 +217,8 @@ void	ft_parse_r2(t_command *aux, t_minilist **command, char *line, int *i)
 	}
 }
 
-void	ft_parse_doubleq(int *i, int *j, int *k, char *line, char **argv)
+/* void	ft_parse_doubleq(int *i, int *j, int *k, char *line, char **argv)
 {
-	
 	(*i)++;
 	(*j)++;
 	while(line[*i] != DOUBLE_QUOTE)
@@ -201,9 +229,9 @@ void	ft_parse_doubleq(int *i, int *j, int *k, char *line, char **argv)
 		(*i)++;
 	}
 	(*i)++;
-}
+} */
 
-void	ft_parse_singleq(int *i, int *j, int *k, char *line, t_minilist *result)
+/* void	ft_parse_singleq(int *i, int *j, int *k, char *line, t_minilist *result)
 {
 		(*i)++;
 	(*j)++;
@@ -213,7 +241,7 @@ void	ft_parse_singleq(int *i, int *j, int *k, char *line, t_minilist *result)
 		(*i)++;
 	}
 	(*i)++;
-}
+} */
 
 t_minilist	*ft_minilstnew(t_command *content)
 {
@@ -266,7 +294,7 @@ t_minilist	*ft_minilstlast(t_minilist *lst)
 
 int	main()
 {
-	char *line = "\"echo -\" hola";
+	char *line = "\"echo -             \'\" a dios ";
 	ft_parse(line);
 }
 /* 
