@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 13:03:44 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/29 20:37:09 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/01 13:51:37 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,9 @@ static char	*solve_path(
 	if (path_is_solved(cmd_name))
 		// return a copy to avoid double free on parent
 		return (ft_strdup(cmd_name));
-	//TODO substitute getenv call for own getenv
-	path = ft_split(getenv("PATH"), COLON);
+	path = ft_split(get_env("PATH", msh), COLON);
 	if (!path)
 		return (NULL);
-	(void)msh;
 	cmd_path = NULL;
 	i = -1;
 	while (!cmd_path && path[++i])
