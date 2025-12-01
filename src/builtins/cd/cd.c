@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 00:05:22 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/31 01:38:14 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/01 13:59:19 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ u_int8_t	builtin_cd(
 		return (2);
 	}
 	else if (cmd.argc == 1)
-		path = getenv("HOME");
+		path = get_env("HOME");
 	else
 		path = cmd.argv[1];
 	if (chdir(path) == -1)
