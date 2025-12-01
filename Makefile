@@ -6,7 +6,7 @@
 #    By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/30 20:22:21 by sede-san          #+#    #+#              #
-#    Updated: 2025/11/01 19:30:37 by sede-san         ###   ########.fr        #
+#    Updated: 2025/12/01 14:05:56 by sede-san         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ $(OBJS_PATH)/%.o: $(SRC_PATH)/%.c
 all: mandatory
 .PHONY: all
 
-mandatory: libft get_next_line ft_printf $(NAME)
+mandatory: libft get_next_line ft_printf ft_args $(NAME)
 .PHONY: mandatory
 
 $(NAME): $(OBJS)
