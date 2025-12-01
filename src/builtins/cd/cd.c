@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 00:05:22 by sede-san          #+#    #+#             */
-/*   Updated: 2025/12/01 14:00:31 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/01 14:11:32 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ static u_int8_t	handle_error(
 ){
 	u_int8_t	exit_code;
 
+	(void)msh;
+	exit_code = 0;
 	if (access(path, F_OK) != -1)
 		// No such file or directory
 		exit_code = 1;
