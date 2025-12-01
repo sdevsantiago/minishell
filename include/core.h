@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 19:10:13 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/30 16:05:48 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/01 13:33:37 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_command	t_command;
  */
 typedef struct s_variables
 {
-	char	**environment;
+	t_hashmap	*environment;
 	// char	**internal;
 }	t_variables;
 
@@ -81,5 +81,18 @@ extern int		minishell_init(t_minishell *minishell, char **envp);
 extern u_int8_t	minishell_run(t_minishell *minishell);
 
 extern void		minishell_clear(t_minishell *minishell);
+
+/* environment.c */
+
+extern void		set_envp(char **envp, t_minishell *msh);
+
+extern void		set_env(const char *env_name, char *env_value,
+					t_minishell *msh);
+
+extern char		**get_envp(t_minishell *msh);
+
+extern void		free_envp(char **envp);
+
+extern char		*get_env(const char *env_name, t_minishell *msh);
 
 #endif /* CORE_H */
