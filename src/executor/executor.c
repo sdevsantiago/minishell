@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 13:03:44 by sede-san          #+#    #+#             */
-/*   Updated: 2025/12/01 13:51:37 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/01 14:08:47 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,11 @@ static void	handle_child(
 	t_command *cmd,
 	t_minishell *msh
 ){
-	execve(cmd->path, cmd->argv, msh->variables.environment);
+	char	**envp;
+
+	envp = get_envp(msh);
+	execve(cmd->path, cmd->argv, envp);
+	free_envp(envp);
 }
 
 static void	handle_parent(
