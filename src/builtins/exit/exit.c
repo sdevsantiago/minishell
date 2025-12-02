@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 01:20:48 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/30 09:08:02 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/01 19:15:08 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ u_int8_t	builtin_exit(
 	ft_eputendl("exit");
 	if (cmd.argc == 1)
 	{
-		// msh.exit = 1;
+		msh->exit = 1;
 		// return the last exit_status, if none 0 is returned
 		return (msh->exit_status);
 	}
@@ -37,7 +37,7 @@ u_int8_t	builtin_exit(
 	}
 	else
 	{
-		// msh.exit = 1;
+		msh->exit = 1;
 		// cast to u_int8_t causes to return a value between 0 and 255
 		return ((u_int8_t)ft_atol(cmd.argv[1]));
 	}

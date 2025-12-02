@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 19:10:13 by sede-san          #+#    #+#             */
-/*   Updated: 2025/12/01 13:33:37 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:02:10 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_variables
 typedef struct s_minishell
 {
 	t_variables	variables;
+	t_hashmap	*builtins;
 	u_int8_t	exit_status;
 	u_int8_t	exit;
 }	t_minishell;

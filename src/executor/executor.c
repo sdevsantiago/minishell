@@ -6,38 +6,39 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 13:03:44 by sede-san          #+#    #+#             */
-/*   Updated: 2025/12/01 14:08:47 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/02 09:07:28 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "builtins.h"
 
 static char		*solve_path(char *cmd_name, t_minishell *msh);
-static u_int8_t	path_is_solved(char *cmd_name);
+static u_int8_t	path_is_solved(char *cmd_name, t_minishell *msh);
 static void		handle_child(t_command *cmd, t_minishell *msh);
 static void		handle_parent(pid_t child_pid, t_command *cmd, t_minishell *msh);
 
 u_int8_t	execute(
 	t_command cmd,
 	t_minishell *msh
-){
+) {
 	pid_t	child_pid;
 
 	cmd.path = solve_path(cmd.argv[0], msh);
 	if (!cmd.path)
 	{
-		// command not found
 		ft_eprintf("minishell: %s: command not found\n", cmd.argv[0]);
 		return (msh->exit_status = 127, msh->exit_status);
 	}
-	if (access(cmd.path, X_OK) != EXIT_SUCCESS)
+	if (!is_builtin(cmd.path, msh) && access(cmd.path, X_OK) != EXIT_SUCCESS)
 	{
-		// permission denied
 		ft_eputstr("minishell: ");
 		perror(cmd.path);
 		return (msh->exit_status = 126, msh->exit_status);
 	}
-	child_pid = fork();
+	child_pid = 0;
+	if (!is_builtin(cmd.path, msh))
+		child_pid = fork();
 	if (child_pid == -1)
 		perror("minishell");
 	else if (child_pid == 0)
@@ -55,7 +56,7 @@ static char	*solve_path(
 	char	**path;
 	size_t	i;
 
-	if (path_is_solved(cmd_name))
+	if (path_is_solved(cmd_name, msh))
 		// return a copy to avoid double free on parent
 		return (ft_strdup(cmd_name));
 	path = ft_split(get_env("PATH", msh), COLON);
@@ -88,11 +89,13 @@ static char	*solve_path(
 }
 
 static u_int8_t	path_is_solved(
-	char *cmd_name
+	char *cmd_name,
+	t_minishell *msh
 ){
 	return (ft_strncmp(cmd_name, "/", 1) == 0
 		|| (cmd_name[1] && ft_strncmp(cmd_name, "./", 2) == 0)
 		|| (cmd_name[2] && ft_strncmp(cmd_name, "../", 3) == 0)
+		|| is_builtin(cmd_name, msh)
 	);
 }
 
@@ -100,11 +103,20 @@ static void	handle_child(
 	t_command *cmd,
 	t_minishell *msh
 ){
-	char	**envp;
+	char			**envp;
+	t_builtin_func	builtin;
 
-	envp = get_envp(msh);
-	execve(cmd->path, cmd->argv, envp);
-	free_envp(envp);
+	if (is_builtin(cmd->argv[0], msh))
+	{
+		builtin = ft_hashmap_get(msh->builtins, cmd->argv[0]);
+		builtin(*cmd, msh);
+	}
+	else
+	{
+		envp = get_envp(msh);
+		execve(cmd->path, cmd->argv, envp);
+		free_envp(envp);
+	}
 }
 
 static void	handle_parent(
