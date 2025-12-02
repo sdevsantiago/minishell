@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:04:57 by sede-san          #+#    #+#             */
-/*   Updated: 2025/12/01 17:54:26 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/02 20:54:33 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ u_int8_t	set_builtins(
 	ft_hashmap_put(msh->builtins, ft_strdup("echo"), builtin_echo);
 	ft_hashmap_put(msh->builtins, ft_strdup("exit"), builtin_exit);
 	ft_hashmap_put(msh->builtins, ft_strdup("pwd"), builtin_pwd);
+	ft_hashmap_put(msh->builtins, ft_strdup("unset"), builtin_unset);
 	return (1);
 }
 

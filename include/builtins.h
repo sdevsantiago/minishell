@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 22:09:51 by sede-san          #+#    #+#             */
-/*   Updated: 2025/12/01 17:53:57 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/02 20:47:03 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include "ft_args.h"
 
 typedef unsigned char	(*t_builtin_func)(t_command cmd, t_minishell *msh);
-
 
 /******************************************************************************/
 /*                                 Functions                                  */
@@ -45,5 +44,9 @@ extern u_int8_t	builtin_exit(t_command cmd, t_minishell *msh);
 /* pwd.c */
 
 extern u_int8_t	builtin_pwd(t_command cmd, t_minishell *msh);
+
+/* unset.c */
+
+extern u_int8_t	builtin_unset(t_command cmd, t_minishell *msh);
 
 #endif /* BUILTINS_H */
