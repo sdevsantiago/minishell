@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 20:51:33 by sede-san          #+#    #+#             */
-/*   Updated: 2025/12/01 13:38:35 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/01 19:02:18 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ int	minishell_init(
 	char		**envp
 ){
 	ft_bzero(minishell, sizeof(t_minishell));
-	minishell->variables.environment
-		= ft_hashmap_new(32, ft_hashmap_hashstr, ft_hashmap_strcmp);
 	set_envp(envp, minishell);
-	if (minishell->variables.environment == NULL)
+	set_builtins(minishell);
+	if (minishell->variables.environment == NULL || minishell->builtins == NULL)
+	{
+		minishell_clear(minishell);
 		return (0);
+	}
 	return (1);
 }
 
@@ -32,7 +34,7 @@ u_int8_t	minishell_run(
 	t_command	command;
 
 	line = NULL;
-	while (!minishell->exit)
+	while (minishell->exit == 0)
 	{
 		line = readline("minishell > ");
 		if (*line)
@@ -50,6 +52,9 @@ void	minishell_clear(
 	t_minishell	*minishell
 ){
 	rl_clear_history();
-	ft_hashmap_clear(&minishell->variables.environment, free);
+	if (minishell->variables.environment != NULL)
+		ft_hashmap_clear(&minishell->variables.environment, free);
+	if (minishell->builtins != NULL)
+		ft_hashmap_clear_keys(&minishell->builtins);
 	ft_bzero(minishell, sizeof(t_minishell));
 }

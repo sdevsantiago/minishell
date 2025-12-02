@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 09:12:39 by sede-san          #+#    #+#             */
-/*   Updated: 2025/12/01 13:01:56 by sede-san         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:27:57 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	set_envp(
 ) {
 	char	**splitted_env;
 
+	msh->variables.environment
+		= ft_hashmap_new(32, ft_hashmap_hashstr, ft_hashmap_strcmp);
 	if (msh == NULL)
 	{
 		ft_hashmap_clear(&msh->variables.environment, free);
