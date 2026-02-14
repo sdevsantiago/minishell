@@ -1,32 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 16:34:42 by sede-san          #+#    #+#             */
-/*   Updated: 2026/02/09 18:46:21 by sede-san         ###   ########.fr       */
+/*   Created: 2026/02/13 21:09:23 by sede-san          #+#    #+#             */
+/*   Updated: 2026/02/14 13:03:15 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "core.h"
 
-int	main(
-	int argc,
-	char const *argv[],
-	char **envp
-){
-	t_minishell	minishell;
+void	handle_sigint_status(
+	t_minishell *minishell
+)
+{
+	if (!minishell_consume_sigint())
+		return ;
+	minishell->exit_status = 130;
+}
 
-	if (argc != 1 || argv[1] || !envp)
-	{
-		printf("Usage: ./minishell\n");
-		return (EXIT_FAILURE);
-	}
-	minishell_init(&minishell, envp);
-	minishell_run(&minishell);
-	minishell_clear(&minishell);
-	return (minishell.exit_status);
+bool	handle_eof(
+	char *line,
+	t_minishell *minishell
+)
+{
+	if (line != NULL)
+		return (false);
+	if (isatty(STDIN_FILENO))
+		ft_putendl("exit");
+	free(line);
+	minishell->exit = true;
+	return (true);
 }

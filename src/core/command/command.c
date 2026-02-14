@@ -1,32 +1,11 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 16:34:42 by sede-san          #+#    #+#             */
-/*   Updated: 2026/02/09 18:46:21 by sede-san         ###   ########.fr       */
+/*   Created: 2026/02/09 18:40:03 by sede-san          #+#    #+#             */
+/*   Updated: 2026/02/09 18:40:04 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "minishell.h"
-#include "core.h"
-
-int	main(
-	int argc,
-	char const *argv[],
-	char **envp
-){
-	t_minishell	minishell;
-
-	if (argc != 1 || argv[1] || !envp)
-	{
-		printf("Usage: ./minishell\n");
-		return (EXIT_FAILURE);
-	}
-	minishell_init(&minishell, envp);
-	minishell_run(&minishell);
-	minishell_clear(&minishell);
-	return (minishell.exit_status);
-}

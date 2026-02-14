@@ -6,7 +6,7 @@
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 16:35:10 by sede-san          #+#    #+#             */
-/*   Updated: 2025/10/23 13:25:25 by sede-san         ###   ########.fr       */
+/*   Updated: 2026/02/14 15:17:38 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 # define MINISHELL_H
 
 # include "libft.h"
-# include "core.h"
-# include "parser.h"
+# include "ft_printf.h"
+# include "get_next_line.h"
 # include "chardefs.h"
+# include <stdbool.h>
+# include <stdint.h>
+# include <errno.h>
 # include <readline/readline.h>	// readline(3), rl_clear_history(),
 								// rl_on_new_line(), rl_replace_line(),
 								// rl_redisplay()
@@ -38,5 +41,7 @@
 # include <termios.h>			// tcsetattr(3), tcgetattr(3)
 # include <term.h>				// tgetent(3), tgetflag(3), tgetnum(3),
 								// tgetstr(3), tgoto(3), tputs(3)
+
+# define MINISHELL_VERSION "1.0.0"
 
 #endif /* MINISHELL_H */

@@ -1,32 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 16:34:42 by sede-san          #+#    #+#             */
-/*   Updated: 2026/02/09 18:46:21 by sede-san         ###   ########.fr       */
+/*   Created: 2025/10/31 02:41:11 by sede-san          #+#    #+#             */
+/*   Updated: 2025/12/01 18:05:51 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "core.h"
+#include "builtins.h"
+#include "echo_def.h"
 
-int	main(
-	int argc,
-	char const *argv[],
-	char **envp
+uint8_t	builtin_echo(
+	t_command cmd,
+	t_minishell *msh
 ){
-	t_minishell	minishell;
+	const t_args	args = read_args(cmd);
+	size_t			i;
 
-	if (argc != 1 || argv[1] || !envp)
+	(void)msh;
+	i = -1;
+	while (args.strings.data.sp[++i])
 	{
-		printf("Usage: ./minishell\n");
-		return (EXIT_FAILURE);
+		ft_putstr(args.strings.data.sp[i]);
+		if (args.strings.data.sp[i + 1])
+			ft_putchar(SPACE);
 	}
-	minishell_init(&minishell, envp);
-	minishell_run(&minishell);
-	minishell_clear(&minishell);
-	return (minishell.exit_status);
+	if (args.no_newline.data.b == false)
+		ft_putchar(NEWLINE);
+	return (EXIT_SUCCESS);
 }

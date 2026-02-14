@@ -1,32 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   export_sort.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 16:34:42 by sede-san          #+#    #+#             */
-/*   Updated: 2026/02/09 18:46:21 by sede-san         ###   ########.fr       */
+/*   Created: 2026/02/14 23:55:00 by sede-san          #+#    #+#             */
+/*   Updated: 2026/02/14 23:55:00 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "core.h"
+#include "builtins.h"
 
-int	main(
-	int argc,
-	char const *argv[],
-	char **envp
-){
-	t_minishell	minishell;
+void	export_sort_entries(
+	t_map_entry **entries,
+	size_t count
+)
+{
+	size_t		i;
+	size_t		j;
+	t_map_entry	*tmp;
 
-	if (argc != 1 || argv[1] || !envp)
+	i = 0;
+	while (i < count)
 	{
-		printf("Usage: ./minishell\n");
-		return (EXIT_FAILURE);
+		j = i + 1;
+		while (j < count)
+		{
+			if (ft_strcmp((char *)entries[i]->key, (char *)entries[j]->key) > 0)
+			{
+				tmp = entries[i];
+				entries[i] = entries[j];
+				entries[j] = tmp;
+			}
+			j++;
+		}
+		i++;
 	}
-	minishell_init(&minishell, envp);
-	minishell_run(&minishell);
-	minishell_clear(&minishell);
-	return (minishell.exit_status);
 }

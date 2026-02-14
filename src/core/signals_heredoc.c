@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   signals_heredoc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 16:34:42 by sede-san          #+#    #+#             */
-/*   Updated: 2026/02/09 18:46:21 by sede-san         ###   ########.fr       */
+/*   Created: 2026/02/14 23:40:00 by sede-san          #+#    #+#             */
+/*   Updated: 2026/02/14 23:40:00 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "core.h"
+#include "signals_internal.h"
 
-int	main(
-	int argc,
-	char const *argv[],
-	char **envp
-){
-	t_minishell	minishell;
+static void	sigint_handler_heredoc(int signal)
+{
+	g_signal = signal;
+	write(STDOUT_FILENO, "\n", 1);
+}
 
-	if (argc != 1 || argv[1] || !envp)
-	{
-		printf("Usage: ./minishell\n");
-		return (EXIT_FAILURE);
-	}
-	minishell_init(&minishell, envp);
-	minishell_run(&minishell);
-	minishell_clear(&minishell);
-	return (minishell.exit_status);
+void	minishell_set_heredoc_signals(void)
+{
+	struct sigaction	action;
+
+	ft_bzero(&action, sizeof(action));
+	action.sa_handler = sigint_handler_heredoc;
+	sigemptyset(&action.sa_mask);
+	sigaction(SIGINT, &action, NULL);
+	action.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &action, NULL);
 }

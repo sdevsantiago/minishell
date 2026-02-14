@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   signals_child.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 16:34:42 by sede-san          #+#    #+#             */
-/*   Updated: 2026/02/09 18:46:21 by sede-san         ###   ########.fr       */
+/*   Created: 2026/02/14 18:20:00 by sede-san          #+#    #+#             */
+/*   Updated: 2026/02/14 18:20:00 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "core.h"
 
-int	main(
-	int argc,
-	char const *argv[],
-	char **envp
-){
-	t_minishell	minishell;
+void	minishell_set_child_signals(void)
+{
+	struct sigaction	action;
 
-	if (argc != 1 || argv[1] || !envp)
-	{
-		printf("Usage: ./minishell\n");
-		return (EXIT_FAILURE);
-	}
-	minishell_init(&minishell, envp);
-	minishell_run(&minishell);
-	minishell_clear(&minishell);
-	return (minishell.exit_status);
+	ft_bzero(&action, sizeof(action));
+	action.sa_handler = SIG_DFL;
+	sigemptyset(&action.sa_mask);
+	sigaction(SIGINT, &action, NULL);
+	sigaction(SIGQUIT, &action, NULL);
 }

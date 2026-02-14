@@ -1,3 +1,4 @@
+<!-- *This project has been made by sede-san and padan-pe* -->
 <div align="center">
 
   <!-- Project badge -->
@@ -30,7 +31,21 @@
 
 > The purpose of this project is to create a simple bash-like shell.
 
-DETAILED INFO
+**minishell** is a minimal bash-like shell implementation written in C. It provides essential shell functionality including command execution, piping, input/output redirection, and built-in commands.
+
+### Key Features
+
+- **Command Execution**: Execute external programs with argument parsing and path resolution.
+- **Pipelines**: Connect multiple commands using the pipe operator (`|`).
+- **Redirections**: Support for input (`<`), output (`>`), and append (`>>`) file redirections.
+- **Built-in Commands**: `cd`, `echo`, `env`, `exit`, `export`, `pwd`, `unset`.
+- **Environment Variables**: Access and manage shell environment variables.
+- **Interactive Shell**: Read-Evaluate-Print Loop (REPL) powered by GNU Readline.
+- **Quote Handling**: Proper handling of single and double quotes for literal strings.
+
+### Development
+
+The codebase adheres to **Norminette v4** standards and uses a modular architecture separating parsing, execution, and built-in command logic. Build artifacts are automatically generated; refer to `AGENTS.md` for detailed development guidelines.
 
 For detailed info, refer to this project [subject](docs/en.subject.pdf).
 
@@ -88,7 +103,20 @@ For detailed info, refer to this project [subject](docs/en.subject.pdf).
 
 ### Basic Usage
 
-INSTRUCTIONS
+1. **Execute the shell**
+
+```bash
+./minishell
+```
+
+2. **Interact with it like if it was bash**
+```bash
+echo "Hello, World!"
+...
+cat groceries.txt | grep tomatoes
+...
+echo "Greetings $USER!" > greetings.txt
+```
 
 ## 📏 Norminette
 

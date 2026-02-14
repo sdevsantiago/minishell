@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   errors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 16:34:42 by sede-san          #+#    #+#             */
-/*   Updated: 2026/02/09 18:46:21 by sede-san         ###   ########.fr       */
+/*   Created: 2026/02/10 22:28:01 by sede-san          #+#    #+#             */
+/*   Updated: 2026/02/14 01:11:38 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "core.h"
+#ifndef ERRORS_H
+# define ERRORS_H
 
-int	main(
-	int argc,
-	char const *argv[],
-	char **envp
-){
-	t_minishell	minishell;
+# include "minishell.h"
+# include "core.h"
+# include "parser.h"
 
-	if (argc != 1 || argv[1] || !envp)
-	{
-		printf("Usage: ./minishell\n");
-		return (EXIT_FAILURE);
-	}
-	minishell_init(&minishell, envp);
-	minishell_run(&minishell);
-	minishell_clear(&minishell);
-	return (minishell.exit_status);
-}
+extern void	syntax_error_unexpected_token(t_token *token);
+extern void	malloc_error(void);
+extern void	command_not_found_error(const char *command);
+
+#endif /* ERRORS_H */

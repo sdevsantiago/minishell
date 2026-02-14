@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sede-san <sede-san@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 16:34:42 by sede-san          #+#    #+#             */
-/*   Updated: 2026/02/09 18:46:21 by sede-san         ###   ########.fr       */
+/*   Created: 2025/10/29 22:08:55 by sede-san          #+#    #+#             */
+/*   Updated: 2025/12/01 16:27:08 by sede-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "core.h"
+#include "builtins.h"
 
-int	main(
-	int argc,
-	char const *argv[],
-	char **envp
+uint8_t	builtin_pwd(
+	t_command cmd,
+	t_minishell *msh
 ){
-	t_minishell	minishell;
+	char	*cwd;
 
-	if (argc != 1 || argv[1] || !envp)
+	(void)cmd;
+	(void)msh;
+	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
 	{
-		printf("Usage: ./minishell\n");
+		perror("minishell: pwd");
 		return (EXIT_FAILURE);
 	}
-	minishell_init(&minishell, envp);
-	minishell_run(&minishell);
-	minishell_clear(&minishell);
-	return (minishell.exit_status);
+	ft_putendl(cwd);
+	free(cwd);
+	return (EXIT_SUCCESS);
 }
