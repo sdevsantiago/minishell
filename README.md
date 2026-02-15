@@ -12,7 +12,7 @@
   <p>A simple bash-like shell written in C.</p>
 
   <!-- Info badges -->
-  <img src="https://img.shields.io/badge/Score-100%2F101-brightgreen?style=for-the-badge&labelColor=black" alt="Score">
+  <img src="https://img.shields.io/badge/Score-101%2F100-brightgreen?style=for-the-badge&labelColor=black" alt="Score">
   <img src="https://img.shields.io/badge/Language-C-blue?style=for-the-badge&labelColor=black" alt="Language">
   <br>
   <img src="https://img.shields.io/github/last-commit/sdevsantiago/minishell?display_timestamp=committer&style=for-the-badge&labelColor=black" alt="Last commit">
