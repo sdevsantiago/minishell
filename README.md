@@ -21,6 +21,7 @@
   <img src="https://github.com/sdevsantiago/minishell/actions/workflows/makefile.yml/badge.svg">
 
 </div>
+
 ---
 
 ## ℹ️ About Project
@@ -38,10 +39,6 @@
 - **Environment Variables**: Access and manage shell environment variables.
 - **Interactive Shell**: Read-Evaluate-Print Loop (REPL) powered by GNU Readline.
 - **Quote Handling**: Proper handling of single and double quotes for literal strings.
-
-### Development
-
-The codebase adheres to **Norminette v4** standards and uses a modular architecture separating parsing, execution, and built-in command logic. Build artifacts are automatically generated; refer to `AGENTS.md` for detailed development guidelines.
 
 For detailed info, refer to this project [subject](docs/en.subject.pdf).
 
