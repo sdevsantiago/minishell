@@ -2,8 +2,6 @@ name: Update 42 repo
 
 on:
   push:
-    branches:
-      - main
 
 permissions:
   contents: write
@@ -25,28 +23,38 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Checkout
         uses: actions/checkout@v5
         with:
           path: ${{ steps.repo_name.outputs.repo_name }}
+          fetch-depth: 1
 
       - name: Checkout 42
         uses: actions/checkout@v5
         with:
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           repository: sdevsantiago/42
           path: 42
-          submodules: true
+          submodules: false
+          fetch-depth: 1
+
+      - name: Init specific submodule
+        run: |
+          cd 42
+          git submodule update --init --depth 1 ${{ steps.repo_name.outputs.repo_name }}
 
       - name: Sync and commit
         run: |
           cd 42
+          git remote set-url origin git@github.com:sdevsantiago/42.git
           git submodule update --remote ${{ steps.repo_name.outputs.repo_name }}
           if ! git diff --quiet; then
-          git commit -am "[${{ steps.repo_name.outputs.repo_name }}] $(cd ${{ steps.repo_name.outputs.repo_name }} && git log -n 1 --format=%B)"
+            git commit -am "[${{ steps.repo_name.outputs.repo_name }}] $(cd ${{ steps.repo_name.outputs.repo_name }} && git log -n 1 --format=%B)"
             git push
           else
             echo "Submodule already up to date."
           fi
-        env:
-          SYNC_PAT: ${{ secrets.SYNC_PAT }}
